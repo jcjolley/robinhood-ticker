@@ -1,14 +1,18 @@
-(defproject binaryage/chromex-sample "0.1.0-SNAPSHOT"
+(defproject jjolley/robinhood-ticker "0.0.1"
   :dependencies [[org.clojure/clojure "1.9.0"]
                  [org.clojure/clojurescript "1.10.439"]
                  [org.clojure/core.async "0.4.490"]
-                 [binaryage/chromex "0.7.0"]
+                 [binaryage/chromex "0.7.1"]
                  [binaryage/devtools "0.9.10"]
-                 [figwheel "0.5.17"]
-                 [environ "1.1.0"]]
+                 [figwheel "0.5.18"]
+                 [environ "1.1.0"]
+                 [reagent "0.8.1"]
+                 [binaryage/oops "0.6.4"]]
+
+
 
   :plugins [[lein-cljsbuild "1.1.7"]
-            [lein-figwheel "0.5.17"]
+            [lein-figwheel "0.5.18"]
             [lein-shell "0.5.0"]
             [lein-environ "1.1.0"]
             [lein-cooper "1.2.2"]]
@@ -37,7 +41,7 @@
                                            :source-map    true}}
                            :popup
                            {:source-paths ["src/popup"]
-                            :figwheel     true
+                            :figwheel     {:on-jsload     chromex-sample.popup.core/mount-root}
                             :compiler     {:output-to     "resources/unpacked/compiled/popup/main.js"
                                            :output-dir    "resources/unpacked/compiled/popup"
                                            :asset-path    "compiled/popup"

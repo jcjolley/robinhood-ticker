@@ -1,9 +1,11 @@
-(ns chromex-sample.popup.core
+(ns ^:figwheel-always chromex-sample.popup.core
   (:require-macros [cljs.core.async.macros :refer [go-loop]])
   (:require [cljs.core.async :refer [<!]]
             [chromex.logging :refer-macros [log info warn error group group-end]]
             [chromex.protocols.chrome-port :refer [post-message!]]
-            [chromex.ext.runtime :as runtime :refer-macros [connect]]))
+            [chromex.ext.runtime :as runtime :refer-macros [connect]]
+            [chromex.ext.tabs :as tabs]
+            [reagent.core :as r]))
 
 ; -- a message loop ---------------------------------------------------------------------------------------------------------
 
@@ -23,8 +25,20 @@
     (post-message! background-port "hello from POPUP!")
     (run-message-loop! background-port)))
 
+(defn root []
+  [:div
+    [:div.jumbotron "Damn"]
+    [:p "THAT TOOK FOREVER"]])
+
+
+(defn mount-root []
+  (do
+    (r/render [root] (js/document.getElementById "popup-main"))
+    (print "Mount-root was called")))
+
 ; -- main entry point -------------------------------------------------------------------------------------------------------
 
 (defn init! []
   (log "POPUP: init")
+  (mount-root)
   (connect-to-background-page!))
