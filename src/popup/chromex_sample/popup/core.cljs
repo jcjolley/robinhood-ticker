@@ -8,7 +8,7 @@
             [reagent.core :as r]))
 
 ; -- a message loop ---------------------------------------------------------------------------------------------------------
-
+(def bg-port (atom))
 (defn process-message! [message]
   (log "POPUP: got message:" message))
 
@@ -22,14 +22,13 @@
 
 (defn connect-to-background-page! []
   (let [background-port (runtime/connect)]
+    (reset! bg-port background-port)
     (post-message! background-port "hello from POPUP!")
     (run-message-loop! background-port)))
 
 (defn root []
   [:div
-    [:div.jumbotron "Damn"]
-    [:p "THAT TOOK FOREVER"]])
-
+    [:button {:on-click #(post-message! @bg-port "add-ticker")}"Click to Add Ticker"]])
 
 (defn mount-root []
   (do

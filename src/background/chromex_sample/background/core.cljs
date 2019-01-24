@@ -8,8 +8,9 @@
             [chromex.protocols.chrome-port :refer [post-message! get-sender]]
             [chromex.ext.tabs :as tabs]
             [chromex.ext.runtime :as runtime]
-            [chromex-sample.background.storage :refer [test-storage!]]))
-
+            [chromex-sample.background.storage :refer [test-storage!]]
+            [oops.core :refer [oget oset! ocall oapply ocall! oapply!
+                               oget+ oset!+ ocall+ oapply+ ocall!+ oapply!+]]))
 (def clients (atom []))
 
 ; -- clients manipulation ---------------------------------------------------------------------------------------------------
@@ -30,6 +31,17 @@
   (go-loop []
     (when-some [message (<! client)]
       (log "BACKGROUND: got client message:" message "from" (get-sender client))
+      (log "current clients: " @clients)
+      (when (= "add-ticker" message)
+        (doseq [other-client @clients]
+          (when (not= other-client client)
+            (log "sending message to" other-client)
+            (post-message! other-client "add-ticker"))))
+      (when (= "remove-ticker" message)
+        (doseq [other-client @clients]
+          (when (not= other-client client)
+            (log "sending message to" other-client)
+            (post-message! other-client "remove-ticker"))))
       (recur))
     (log "BACKGROUND: leaving event loop for client:" (get-sender client))
     (remove-client! client)))

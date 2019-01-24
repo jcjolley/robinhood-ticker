@@ -5,9 +5,11 @@
                  [binaryage/chromex "0.7.1"]
                  [binaryage/devtools "0.9.10"]
                  [figwheel "0.5.18"]
+                 [figwheel-sidecar "0.5.18"]
                  [environ "1.1.0"]
                  [reagent "0.8.1"]
-                 [binaryage/oops "0.6.4"]]
+                 [binaryage/oops "0.6.4"]
+                 [cljs-http "0.1.45"]]
 
 
 
